@@ -23,14 +23,23 @@ contract LotteryContract{
     address public owner;
     // array of players
     address payable [] players;
+    // keeps the count of the number of lottery being played
+    uint public lotteryId;
+    // holds the history of the winners mapped with the lotteryId
+    mapping(uint => address payable) lotteryHistory;
 
     constructor(){
         owner = msg.sender;
+        lotteryId = 1;
     }
 
     modifier onlyOnwer() {
         require(msg.sender == owner, "You are not the owner");
         _;
+    }
+
+    function getWinnerFromLotteryId(uint id) view public returns(address) {
+        return lotteryHistory[id];
     }
 
     // adds the current address interacting with the function as a new player
@@ -45,6 +54,12 @@ contract LotteryContract{
         uint index = generateRandomNumber() % players.length;
         // pay to the winner
         players[index].transfer(address(this).balance);
+
+        // saving the winner in the lottery history
+        lotteryHistory[lotteryId] = players[index];
+
+        // increment the lottery number
+        lotteryId++;
         // reset the state of the contract
         players = new address payable [](0);
     }
