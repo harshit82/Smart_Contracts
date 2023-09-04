@@ -34,7 +34,7 @@ contract VendingMachine {
         Adds to the supply in the vending machine
     */
     function restock(uint256 restockBalance) public {
-        // checks if the address of the account currently accessing the smart contract is the owner or not
+        // checks if the address of the account currently accessing the function is the owner or not
         require(msg.sender == owner, "You are not the owner, so you are not allowed to restock");
         // if yes then it increments the amount of drinks in the vending machine by the restockBalance provided
         drinksBalances[address(this)] += restockBalance;
